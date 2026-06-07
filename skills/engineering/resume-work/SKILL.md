@@ -1,6 +1,6 @@
 ---
 name: resume-work
-description: Resume paused work after an interruption — end of day, emergency stop, blackout, dropped connection, crash. Given a brief of the most recent work, studies it, audits git worktrees and uncommitted local changes for half-finished work, writes a markdown continuation plan that ends in a ready-to-run agentic prompt, then shares a findings summary. Use when the user says "resume work", "pick up where we left off", "continue from the handoff", or returns after a break and wants to restart a paused task.
+description: Resume paused work after an interruption — end of day, emergency stop, blackout, dropped connection, crash. Given a brief of the most recent work, studies it, audits git worktrees and uncommitted local changes for half-finished work, writes a markdown continuation plan that ends in a ready-to-run agentic prompt, then shares a findings summary and STOPS — it produces the plan and never executes it. Use when the user says "resume work", "pick up where we left off", "continue from the handoff", or returns after a break and wants to restart a paused task.
 argument-hint: "Paste the brief of recent work, or a path to the handoff doc"
 ---
 
@@ -9,6 +9,15 @@ argument-hint: "Paste the brief of recent work, or a path to the handoff doc"
 Pick up interrupted work from a brief plus the actual state of the repo. The brief tells you the *intent*; the repo tells you the *reality*. Where they disagree, trust the repo.
 
 Pairs with [`/handoff`](../../productivity/handoff/SKILL.md) — handoff writes the brief, resume-work consumes it.
+
+## This skill is PLAN-ONLY — it never executes
+
+`resume-work` finishes when the plan is written and the findings are shared. **It does not implement, edit, build, install, refresh a worktree, or run any part of the plan.** The plan *is* the deliverable; producing it is the whole job. Phases 1–5 below build the plan and then stop.
+
+- **Write the plan, hand it over, and STOP.** Execution is a *separate* task the user starts explicitly and in their own words ("go", "execute step 1", "build it"). Nothing in this skill — and no answer the user gives you — authorizes you to begin building.
+- **A clarifying question is NOT a gate to execute.** You may have to ask questions to *write* the plan (see Input and Phase 1). The user's answer authorizes only the narrow detail you asked about — never the build. Asking "how should I verify?" and getting an answer is *not* permission to edit code, touch a worktree, or compile. Never use a question to manufacture a green light or to bypass the user's authority.
+- **Surface the plan BEFORE you ask anything not strictly needed to write it.** The user can't approve what they can't see. Show the plan (or the part of it that prompts the question) first; ask after — so the user always knows what they'd be approving.
+- **When in doubt, stop and wait** for an explicit go. Idle-but-correct beats busy-but-unauthorized.
 
 ## Input
 
@@ -56,6 +65,10 @@ Reference existing artifacts by path or URL; don't duplicate their contents.
 
 End the file with a `## Kickoff prompt` section containing a single fenced, self-contained prompt a fresh agent can run to execute the plan. It must state: the goal, the path to this plan file, the branch or worktree to work in, the first concrete action, and any skills to invoke (e.g. `/tdd`, `/diagnose`).
 
-## Phase 5 — Share
+This prompt is an **artifact for later** — something the *user* (or a fresh agent the user chooses to launch) runs when they decide to proceed. Writing it is not running it. You do **not** execute it yourself, now or as a "head start," as part of this skill.
 
-Output the Phase 3 findings summary and the path to the plan file. Offer to start executing the first step.
+## Phase 5 — Share, then STOP
+
+Output the Phase 3 findings summary and the path to the plan file. **Then stop and wait — do not start executing.** Not the first step, not a "quick" setup or worktree refresh, not a single edit. The plan file is the finished deliverable and you are done.
+
+Do **not** offer to "start now" in a way that turns the user's next reply into consent. If the user wants you to proceed, they will say so explicitly — and that go is a fresh, standalone instruction, never the answer to a question you asked. Until you hear it, hold.
